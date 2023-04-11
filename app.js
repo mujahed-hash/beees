@@ -11,7 +11,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-const port = process.env.PORT || 3000;
 app.use('/pics', express.static(path.join('pics')))
 app.use('/api', studentRoute);
 app.use('/api/category', categoryRoute);
@@ -33,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/index.html'));
 });
-
+const port = 3000;
 app.listen(port, (req,res)=>{
     console.log(`running on port ${port}`)
 })

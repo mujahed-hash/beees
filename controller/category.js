@@ -7,6 +7,7 @@ exports.getCategory= async (req,res)=>{
 }
 
 exports.postCategory = async (req,res)=>{
+ try{
     const {name} = req.body;
     const {icon} = req.body;
     const {color} = req.body;
@@ -23,4 +24,10 @@ exports.postCategory = async (req,res)=>{
             ...createdCategory._doc
        }
    })
+ }
+ catch(error){
+   console.error(error)
+   console.log('caused error', error);
+   res.send(error)
+ }
 }
