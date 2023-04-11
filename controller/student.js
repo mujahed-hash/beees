@@ -57,7 +57,7 @@ exports.postStudent = async (req, res) => {
             passingyear
         } = req.body;
 
-        const image = 'http://localhost:3000/pics/' + req.file.filename;
+        const image = 'http://18.224.41.79:3000/pics/' + req.file.filename;
 
         const student = new Student({
             studentId,
