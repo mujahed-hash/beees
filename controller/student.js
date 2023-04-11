@@ -2,30 +2,43 @@ const Student = require('../db/model/student');
 const Category = require('../db/model/category');
 
 exports.getStudent = async (req, res) => {
-    let filter = {}
-    if (req.query.categories) {
-        filter = {
-            category: req.query.categories.split(',')
+   
+
+
+    try{  
+        let filter = {}
+        if (req.query.categories) {
+            filter = {
+                category: req.query.categories.split(',')
+            }
+        } else {
+            console.log('no cat')
         }
-    } else {
-        console.log('no cat')
-    }
-    const students = await Student.find(filter).populate('category');
-    res.send(students);
+        const students = await Student.find(filter).populate('category');
+        res.send(students); 
+        
+}
+     catch(error){
+       console.error(error);
+       console.log('got server error', error)
+     }
 
 }
 exports.getStudentByCatergory = async (req, res) => {
-    let filter = {}
-    if (req.query.categories) {
-        filter = {
-            category: req.query.categories.split(',')
-        }
-        const students = await Student.find(filter).populate('category');
-        res.send(students);
-    } else {
-        console.log('no cat')
-    }
-
+ try{   let filter = {}
+ if (req.query.categories) {
+     filter = {
+         category: req.query.categories.split(',')
+     }
+     const students = await Student.find(filter).populate('category');
+     res.send(students);
+ } else {
+     console.log('no cat')
+ }}
+  catch(error){
+    console.error(error);
+    console.log('got server error', error)
+  }
 }
 
 exports.postStudent = async (req, res) => {
@@ -58,8 +71,11 @@ exports.postStudent = async (req, res) => {
         } = req.body;
 
         // const image = 'http://localhost:3000/pics/' + req.file.filename;
-        const image = 'http://18.224.41.79:3000/pics/' + req.file.filename;
-
+        // const image = 'http://18.224.41.79:3000/pics/' + req.file.filename;
+        const file = req.file;
+        if (!file) return res.status(400).send('No image in the request');
+        const fileName = file.filename;
+        const basePath = `${req.protocol}://${req.get('host')}/pics/`;  
         const student = new Student({
             studentId,
             name,
@@ -68,7 +84,7 @@ exports.postStudent = async (req, res) => {
             course,
             passingyear,
             duration,
-            image
+            image:`${basePath}${fileName}`
         })
 
         const studentData = await student.save();
