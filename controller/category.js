@@ -1,9 +1,16 @@
 const Category = require('../db/model/category');
 
 exports.getCategory= async (req,res)=>{
-   const categories = await Category.find();
+  try{
+    const categories = await Category.find();
 
-   res.status(201).json(categories);
+    res.status(201).json(categories);
+  }
+  catch(error){
+    console.error(error)
+    console.log('caused error', error);
+    res.send(error)
+  }
 }
 
 exports.postCategory = async (req,res)=>{
